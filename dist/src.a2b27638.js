@@ -213,6 +213,10 @@ var game;
 var blocksize = 60;
 var xblocks = 0;
 var yblocks = 0;
+var gameOptions = {
+  manGravity: 0,
+  manSpeed: 150
+};
 window.onload = function () {
   var gameConfig = {
     type: Phaser.AUTO,
@@ -220,8 +224,8 @@ window.onload = function () {
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
-      width: 600,
-      height: 600
+      width: 720,
+      height: 720
     },
     pixelArt: true,
     physics: {
@@ -265,7 +269,8 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
-      this.scoreText = this.add.text(game.config.width - blocksize / 2, 0, this.score, {
+      var flowers = [];
+      this.scoreText = this.add.text(game.config.width - blocksize, 0, this.score, {
         fontSize: "34px",
         fill: "#000000"
       });
@@ -284,26 +289,42 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
         allowGravity: false
       });
       var x, y;
-      for (var i = 0; i < 50; i++) {
-        x = Phaser.Math.Between(0, xblocks) * blocksize + blocksize / 2;
-        y = Phaser.Math.Between(0, yblocks) * blocksize + blocksize / 2;
-        //        console.log(x, y);
-        this.blockGroup.create(x, y, "block");
-      }
-      for (var _i = 0; _i < 5; _i++) {
-        x = Phaser.Math.Between(0, xblocks) * blocksize + blocksize / 2;
-        y = Phaser.Math.Between(0, yblocks) * blocksize + blocksize / 2;
+      for (var i = 0; i < 5; i++) {
+        x = Phaser.Math.Between(1, xblocks - 2) * blocksize + blocksize / 2;
+        y = Phaser.Math.Between(1, yblocks - 2) * blocksize + blocksize / 2;
         //        console.log(x, y);
         this.blueFlowerGroup.create(x, y, "flowerBlue");
+        flowers[i] = {
+          x: x,
+          y: y
+        };
       }
-      for (var _i2 = 0; _i2 < 5; _i2++) {
-        x = Phaser.Math.Between(0, xblocks) * blocksize + blocksize / 2;
-        y = Phaser.Math.Between(0, yblocks) * blocksize + blocksize / 2;
+      for (var _i = 0; _i < 5; _i++) {
+        x = Phaser.Math.Between(1, xblocks - 2) * blocksize + blocksize / 2;
+        y = Phaser.Math.Between(1, yblocks - 2) * blocksize + blocksize / 2;
         //        console.log(x, y);
         this.redFlowerGroup.create(x, y, "flowerRed");
+        flowers[5 + _i] = {
+          x: x,
+          y: y
+        };
+      }
+      for (var _i2 = 0; _i2 < 50; _i2++) {
+        x = Phaser.Math.Between(1, xblocks - 2) * blocksize + blocksize / 2;
+        y = Phaser.Math.Between(1, yblocks - 2) * blocksize + blocksize / 2;
+        //        console.log(x, y);
+        var allowed = true;
+        for (var j = 0; j < 10; j++) {
+          if (x == flowers[j].x && y == flowers[j].y) {
+            allowed = false;
+          }
+        }
+        if (allowed == true) {
+          this.blockGroup.create(x, y, "block");
+        }
       }
       this.man = this.physics.add.sprite(blocksize / 2, blocksize / 2, "man");
-      this.man.body.gravity.y = gameOptions.dudeGravity;
+      this.man.body.gravity.y = gameOptions.manGravity;
       this.physics.add.collider(this.man, this.blockGroup);
       this.physics.add.overlap(this.man, this.blueFlowerGroup, this.collectBlueFlower, null, this);
       this.physics.add.overlap(this.man, this.redFlowerGroup, this.collectRedFlower, null, this);
@@ -313,15 +334,44 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
     key: "collectBlueFlower",
     value: function collectBlueFlower(man, flowerBlue) {
       flowerBlue.disableBody(true, true);
-      this.score += 1;
+      this.score += 10;
       this.scoreText.setText(this.score);
     }
   }, {
     key: "collectRedFlower",
     value: function collectRedFlower(man, flowerRed) {
       flowerRed.disableBody(true, true);
-      this.score += 1;
+      this.score += 20;
       this.scoreText.setText(this.score);
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      if (this.cursors.left.isDown) {
+        this.man.body.velocity.x = -gameOptions.manSpeed;
+        //        this.man.anims.play("left", true)
+      } else if (this.cursors.right.isDown) {
+        this.man.body.velocity.x = gameOptions.manSpeed;
+        //        this.man.anims.play("right", true)
+      } else if (this.cursors.up.isDown) {
+        this.man.body.velocity.y = -gameOptions.manSpeed;
+        //        this.man.anims.play("up", true)
+      } else if (this.cursors.down.isDown) {
+        this.man.body.velocity.y = gameOptions.manSpeed;
+        //        this.man.anims.play("up", true)
+      } else {
+        this.man.body.velocity.x = 0;
+        this.man.body.velocity.y = 0;
+      }
+
+      /*        if(this.cursors.up.isDown && this.man.body.touching.down) {
+                  this.man.body.velocity.y = -gameOptions.dudeGravity / 1.6
+              }
+      
+              if(this.man.y > game.config.height || this.man.y < 0) {
+                  this.scene.start("PlayGame")
+              }
+      */
     }
   }]);
   return PlayGame;
