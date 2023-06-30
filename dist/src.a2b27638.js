@@ -180,14 +180,17 @@ module.exports = "/flower_blue.f3c2aa35.png";
 module.exports = "/flower_red.525bdadf.png";
 },{}],"assets/man2.png":[function(require,module,exports) {
 module.exports = "/man2.b1a957ea.png";
+},{}],"assets/man3.png":[function(require,module,exports) {
+module.exports = "/man3.7a75de70.png";
 },{}],"assets/*.png":[function(require,module,exports) {
 module.exports = {
   "block_white": require("./block_white.png"),
   "flower_blue": require("./flower_blue.png"),
   "flower_red": require("./flower_red.png"),
-  "man2": require("./man2.png")
+  "man2": require("./man2.png"),
+  "man3": require("./man3.png")
 };
-},{"./block_white.png":"assets/block_white.png","./flower_blue.png":"assets/flower_blue.png","./flower_red.png":"assets/flower_red.png","./man2.png":"assets/man2.png"}],"src/index.js":[function(require,module,exports) {
+},{"./block_white.png":"assets/block_white.png","./flower_blue.png":"assets/flower_blue.png","./flower_red.png":"assets/flower_red.png","./man2.png":"assets/man2.png","./man3.png":"assets/man3.png"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.css");
@@ -216,6 +219,7 @@ var yblocks = 0;
 var numBlueFlowers = 5;
 var numRedFlowers = 5;
 var numBlocks = 50;
+var numflowers = 0;
 var gameOptions = {
   manGravity: 0,
   manSpeed: 150
@@ -263,7 +267,7 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.image("flowerBlue", require("../assets/flower_blue.png"));
       this.load.image("flowerRed", require("../assets/flower_red.png"));
       //      this.load.image("man", require("../assets/man2.png"));
-      this.load.spritesheet("man", require("../assets/man2.png"), {
+      this.load.spritesheet("man", require("../assets/man3.png"), {
         frameWidth: 60,
         frameHeight: 60
       });
@@ -301,6 +305,7 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
           x: x,
           y: y
         };
+        numflowers++;
       }
       for (var _i = 0; _i < numRedFlowers; _i++) {
         x = Phaser.Math.Between(1, xblocks - 2) * blocksize + blocksize / 2;
@@ -311,6 +316,7 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
           x: x,
           y: y
         };
+        numflowers++;
       }
       for (var _i2 = 0; _i2 < numBlocks; _i2++) {
         x = Phaser.Math.Between(1, xblocks - 2) * blocksize + blocksize / 2;
@@ -341,6 +347,10 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
       flowerBlue.disableBody(true, true);
       this.score += 10;
       this.scoreText.setText(this.score);
+      numflowers--;
+      if (numflowers == 0) {
+        this.scene.start("PlayGame");
+      }
     }
   }, {
     key: "collectRedFlower",
@@ -348,40 +358,39 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
       flowerRed.disableBody(true, true);
       this.score += 20;
       this.scoreText.setText(this.score);
+      numflowers--;
+      if (numflowers == 0) {
+        this.scene.start("PlayGame");
+      }
     }
   }, {
     key: "update",
     value: function update() {
       if (this.cursors.left.isDown) {
-        this.man.body.velocity.x = -gameOptions.manSpeed;
-        //        this.man.anims.play("left", true)
+        if (this.man.body.position.x > 0) {
+          this.man.body.velocity.x = -gameOptions.manSpeed;
+        }
       } else if (this.cursors.right.isDown) {
         this.man.body.velocity.x = gameOptions.manSpeed;
-        //        this.man.anims.play("right", true)
       } else if (this.cursors.up.isDown) {
         this.man.body.velocity.y = -gameOptions.manSpeed;
-        //        this.man.anims.play("up", true)
       } else if (this.cursors.down.isDown) {
         this.man.body.velocity.y = gameOptions.manSpeed;
-        //        this.man.anims.play("up", true)
       } else {
         this.man.body.velocity.x = 0;
         this.man.body.velocity.y = 0;
       }
 
-      /*        if(this.cursors.up.isDown && this.man.body.touching.down) {
-                  this.man.body.velocity.y = -gameOptions.dudeGravity / 1.6
-              }
-      
-              if(this.man.y > game.config.height || this.man.y < 0) {
-                  this.scene.start("PlayGame")
-              }
+      /*      if(this.man.y > game.config.height || this.man.y < 0) {
+              this.man.body.velocity.x = 0;
+              this.man.body.velocity.y = 0;
+            }
       */
     }
   }]);
   return PlayGame;
 }(Phaser.Scene);
-},{"./styles.css":"src/styles.css","../assets/*.png":"assets/*.png","../assets/block_white.png":"assets/block_white.png","../assets/flower_blue.png":"assets/flower_blue.png","../assets/flower_red.png":"assets/flower_red.png","../assets/man2.png":"assets/man2.png"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./styles.css":"src/styles.css","../assets/*.png":"assets/*.png","../assets/block_white.png":"assets/block_white.png","../assets/flower_blue.png":"assets/flower_blue.png","../assets/flower_red.png":"assets/flower_red.png","../assets/man3.png":"assets/man3.png"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -406,7 +415,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36405" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37509" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

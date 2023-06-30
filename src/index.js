@@ -11,6 +11,7 @@ let yblocks = 0;
 let numBlueFlowers = 5;
 let numRedFlowers = 5;
 let numBlocks = 50;
+let numflowers = 0;
 
 const gameOptions = {
   manGravity: 0,
@@ -59,7 +60,7 @@ class PlayGame extends Phaser.Scene {
       this.load.image("flowerBlue", require("../assets/flower_blue.png"));
       this.load.image("flowerRed", require("../assets/flower_red.png"));
 //      this.load.image("man", require("../assets/man2.png"));
-      this.load.spritesheet("man", require("../assets/man2.png"), { frameWidth: 60, frameHeight: 60 });
+      this.load.spritesheet("man", require("../assets/man3.png"), { frameWidth: 60, frameHeight: 60 });
 //      this.load.spritesheet("dude", "assets/dude.png", {frameWidth: 32, frameHeight: 48})
     }
 
@@ -87,6 +88,7 @@ class PlayGame extends Phaser.Scene {
         console.log("blue: ", i, x, y);
         this.blueFlowerGroup.create(x, y, "flowerBlue");
         flowers[i] = {x: x, y: y};
+        numflowers ++;
       }
       for(let i = 0; i < numRedFlowers; i++) {
         x = Phaser.Math.Between(1, xblocks-2) * blocksize + blocksize/2;
@@ -94,6 +96,7 @@ class PlayGame extends Phaser.Scene {
         console.log("red: ",i, x, y);
         this.redFlowerGroup.create(x, y, "flowerRed");
         flowers[5 + i] = {x: x, y: y};
+        numflowers ++;
       }
       for(let i = 0; i < numBlocks; i++) {
         x = Phaser.Math.Between(1, xblocks-2) * blocksize + blocksize/2;
@@ -124,42 +127,45 @@ class PlayGame extends Phaser.Scene {
         flowerBlue.disableBody(true, true)
         this.score += 10
         this.scoreText.setText(this.score)
+        numflowers --;
+        if(numflowers == 0) { 
+          this.scene.start("PlayGame");
+        }
     }
     collectRedFlower(man, flowerRed) {
         flowerRed.disableBody(true, true)
         this.score += 20
         this.scoreText.setText(this.score)
+        numflowers --;
+        if(numflowers == 0) { 
+          this.scene.start("PlayGame");
+        }
     }
 
     update() {
       if(this.cursors.left.isDown) {
-        this.man.body.velocity.x = -gameOptions.manSpeed
-//        this.man.anims.play("left", true)
+        if (this.man.body.position.x > 0){
+          this.man.body.velocity.x = -gameOptions.manSpeed
+        }
       }
       else if(this.cursors.right.isDown) {
         this.man.body.velocity.x = gameOptions.manSpeed
-//        this.man.anims.play("right", true)
       }
       else if(this.cursors.up.isDown) {
         this.man.body.velocity.y = -gameOptions.manSpeed
-//        this.man.anims.play("up", true)
       }
       else if(this.cursors.down.isDown) {
         this.man.body.velocity.y = gameOptions.manSpeed
-//        this.man.anims.play("up", true)
       }
       else{
         this.man.body.velocity.x = 0;
         this.man.body.velocity.y = 0;
       }
 
-/*        if(this.cursors.up.isDown && this.man.body.touching.down) {
-            this.man.body.velocity.y = -gameOptions.dudeGravity / 1.6
-        }
-
-        if(this.man.y > game.config.height || this.man.y < 0) {
-            this.scene.start("PlayGame")
-        }
+/*      if(this.man.y > game.config.height || this.man.y < 0) {
+        this.man.body.velocity.x = 0;
+        this.man.body.velocity.y = 0;
+      }
 */
 
     }
