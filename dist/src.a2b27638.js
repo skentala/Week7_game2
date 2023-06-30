@@ -305,9 +305,23 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
       this.man = this.physics.add.sprite(blocksize / 2, blocksize / 2, "man");
       this.man.body.gravity.y = gameOptions.dudeGravity;
       this.physics.add.collider(this.man, this.blockGroup);
-
-      //      this.flowerGroup = this.physics.add.group({})
-      //      this.physics.add.collider(this.flowerGroup, this.groundGroup)
+      this.physics.add.overlap(this.man, this.blueFlowerGroup, this.collectBlueFlower, null, this);
+      this.physics.add.overlap(this.man, this.redFlowerGroup, this.collectRedFlower, null, this);
+      this.cursors = this.input.keyboard.createCursorKeys();
+    }
+  }, {
+    key: "collectBlueFlower",
+    value: function collectBlueFlower(man, flowerBlue) {
+      flowerBlue.disableBody(true, true);
+      this.score += 1;
+      this.scoreText.setText(this.score);
+    }
+  }, {
+    key: "collectRedFlower",
+    value: function collectRedFlower(man, flowerRed) {
+      flowerRed.disableBody(true, true);
+      this.score += 1;
+      this.scoreText.setText(this.score);
     }
   }]);
   return PlayGame;
