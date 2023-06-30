@@ -365,6 +365,9 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
           delay: 2000,
           callback: function callback() {
             _this2.scene.start("PlayGame");
+            _this2.score = 0;
+            numflowers = 0;
+            _this2.flowers = [];
           },
           loop: true
         });

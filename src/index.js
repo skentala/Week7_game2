@@ -142,6 +142,9 @@ class PlayGame extends Phaser.Scene {
             delay: 2000,
             callback: ()=>{
               this.scene.start("PlayGame");
+              this.score = 0;
+              numflowers = 0;
+              this.flowers = [];
             },
             loop: true
           })
