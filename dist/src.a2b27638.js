@@ -269,7 +269,8 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
         fontSize: "34px",
         fill: "#000000"
       });
-      this.add.image(blocksize / 2, blocksize / 2, "man");
+
+      //      this.add.image(blocksize/2, blocksize/2, "man")
       this.blockGroup = this.physics.add.group({
         immovable: true,
         allowGravity: false
@@ -301,6 +302,9 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
         //        console.log(x, y);
         this.redFlowerGroup.create(x, y, "flowerRed");
       }
+      this.man = this.physics.add.sprite(blocksize / 2, blocksize / 2, "man");
+      this.man.body.gravity.y = gameOptions.dudeGravity;
+      this.physics.add.collider(this.man, this.blockGroup);
 
       //      this.flowerGroup = this.physics.add.group({})
       //      this.physics.add.collider(this.flowerGroup, this.groundGroup)
