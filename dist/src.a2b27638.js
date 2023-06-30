@@ -255,21 +255,21 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
       this.load.image("block", require("../assets/block_white.png"));
       this.load.image("flowerBlue", require("../assets/flower_blue.png"));
       this.load.image("flowerRed", require("../assets/flower_red.png"));
+      //      this.load.image("man", require("../assets/man2.png"));
       this.load.spritesheet("man", require("../assets/man2.png"), {
-        frameWidth: 30,
-        frameHeight: 30
+        frameWidth: 60,
+        frameHeight: 60
       });
       //      this.load.spritesheet("dude", "assets/dude.png", {frameWidth: 32, frameHeight: 48})
     }
   }, {
     key: "create",
     value: function create() {
-      this.scoreText = this.add.text(32, 3, this.score, {
+      this.scoreText = this.add.text(game.config.width - blocksize / 2, 0, this.score, {
         fontSize: "34px",
         fill: "#000000"
       });
-
-      //      this.add.image(16, 16, "block")
+      this.add.image(blocksize / 2, blocksize / 2, "man");
       this.blockGroup = this.physics.add.group({
         immovable: true,
         allowGravity: false
