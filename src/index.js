@@ -8,6 +8,9 @@ let game;
 let blocksize = 60;
 let xblocks = 0;
 let yblocks = 0;
+let numBlueFlowers = 5;
+let numRedFlowers = 5;
+let numBlocks = 50;
 
 const gameOptions = {
   manGravity: 0,
@@ -78,32 +81,34 @@ class PlayGame extends Phaser.Scene {
         allowGravity: false
       })
       let x, y;
-      for(let i = 0; i < 5; i++) {
+      for(let i = 0; i < numBlueFlowers; i++) {
         x = Phaser.Math.Between(1, xblocks-2) * blocksize + blocksize/2;
         y = Phaser.Math.Between(1, yblocks-2) * blocksize + blocksize/2;
-//        console.log(x, y);
+        console.log("blue: ", i, x, y);
         this.blueFlowerGroup.create(x, y, "flowerBlue");
         flowers[i] = {x: x, y: y};
       }
-      for(let i = 0; i < 5; i++) {
+      for(let i = 0; i < numRedFlowers; i++) {
         x = Phaser.Math.Between(1, xblocks-2) * blocksize + blocksize/2;
         y = Phaser.Math.Between(1, yblocks-2) * blocksize + blocksize/2;
-//        console.log(x, y);
+        console.log("red: ",i, x, y);
         this.redFlowerGroup.create(x, y, "flowerRed");
         flowers[5 + i] = {x: x, y: y};
       }
-      for(let i = 0; i < 50; i++) {
+      for(let i = 0; i < numBlocks; i++) {
         x = Phaser.Math.Between(1, xblocks-2) * blocksize + blocksize/2;
         y = Phaser.Math.Between(1, yblocks-2) * blocksize + blocksize/2;
-//        console.log(x, y);
+        console.log("block: ",i);
         let allowed = true;
-        for (let j = 0; j<10; j++) {
+        for (let j = 0; j < numBlueFlowers+numRedFlowers; j++) {
           if (x == flowers[j].x && y == flowers[j].y){
             allowed = false;
+            console.log("ei käy");
           }
         }
         if (allowed == true){
           this.blockGroup.create(x, y, "block");
+          console.log(x, y);
         }
       }
       this.man = this.physics.add.sprite(blocksize/2, blocksize/2, "man");

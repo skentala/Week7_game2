@@ -213,6 +213,9 @@ var game;
 var blocksize = 60;
 var xblocks = 0;
 var yblocks = 0;
+var numBlueFlowers = 5;
+var numRedFlowers = 5;
+var numBlocks = 50;
 var gameOptions = {
   manGravity: 0,
   manSpeed: 150
@@ -289,38 +292,40 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
         allowGravity: false
       });
       var x, y;
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < numBlueFlowers; i++) {
         x = Phaser.Math.Between(1, xblocks - 2) * blocksize + blocksize / 2;
         y = Phaser.Math.Between(1, yblocks - 2) * blocksize + blocksize / 2;
-        //        console.log(x, y);
+        console.log("blue: ", i, x, y);
         this.blueFlowerGroup.create(x, y, "flowerBlue");
         flowers[i] = {
           x: x,
           y: y
         };
       }
-      for (var _i = 0; _i < 5; _i++) {
+      for (var _i = 0; _i < numRedFlowers; _i++) {
         x = Phaser.Math.Between(1, xblocks - 2) * blocksize + blocksize / 2;
         y = Phaser.Math.Between(1, yblocks - 2) * blocksize + blocksize / 2;
-        //        console.log(x, y);
+        console.log("red: ", _i, x, y);
         this.redFlowerGroup.create(x, y, "flowerRed");
         flowers[5 + _i] = {
           x: x,
           y: y
         };
       }
-      for (var _i2 = 0; _i2 < 50; _i2++) {
+      for (var _i2 = 0; _i2 < numBlocks; _i2++) {
         x = Phaser.Math.Between(1, xblocks - 2) * blocksize + blocksize / 2;
         y = Phaser.Math.Between(1, yblocks - 2) * blocksize + blocksize / 2;
-        //        console.log(x, y);
+        console.log("block: ", _i2);
         var allowed = true;
-        for (var j = 0; j < 10; j++) {
+        for (var j = 0; j < numBlueFlowers + numRedFlowers; j++) {
           if (x == flowers[j].x && y == flowers[j].y) {
             allowed = false;
+            console.log("ei käy");
           }
         }
         if (allowed == true) {
           this.blockGroup.create(x, y, "block");
+          console.log(x, y);
         }
       }
       this.man = this.physics.add.sprite(blocksize / 2, blocksize / 2, "man");
