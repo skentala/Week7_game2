@@ -264,6 +264,11 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      this.scoreText = this.add.text(32, 3, this.score, {
+        fontSize: "34px",
+        fill: "#000000"
+      });
+
       //      this.add.image(16, 16, "block")
       this.blockGroup = this.physics.add.group({
         immovable: true,
