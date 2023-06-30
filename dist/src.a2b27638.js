@@ -355,12 +355,19 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
   }, {
     key: "collectRedFlower",
     value: function collectRedFlower(man, flowerRed) {
+      var _this2 = this;
       flowerRed.disableBody(true, true);
       this.score += 20;
       this.scoreText.setText(this.score);
       numflowers--;
       if (numflowers == 0) {
-        this.scene.start("PlayGame");
+        this.time.addEvent({
+          delay: 2000,
+          callback: function callback() {
+            _this2.scene.start("PlayGame");
+          },
+          loop: true
+        });
       }
     }
   }, {
@@ -380,12 +387,6 @@ var PlayGame = /*#__PURE__*/function (_Phaser$Scene) {
         this.man.body.velocity.x = 0;
         this.man.body.velocity.y = 0;
       }
-
-      /*      if(this.man.y > game.config.height || this.man.y < 0) {
-              this.man.body.velocity.x = 0;
-              this.man.body.velocity.y = 0;
-            }
-      */
     }
   }]);
   return PlayGame;

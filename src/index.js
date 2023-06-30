@@ -138,7 +138,13 @@ class PlayGame extends Phaser.Scene {
         this.scoreText.setText(this.score)
         numflowers --;
         if(numflowers == 0) { 
-          this.scene.start("PlayGame");
+          this.time.addEvent({
+            delay: 2000,
+            callback: ()=>{
+              this.scene.start("PlayGame");
+            },
+            loop: true
+          })
         }
     }
 
@@ -161,14 +167,5 @@ class PlayGame extends Phaser.Scene {
         this.man.body.velocity.x = 0;
         this.man.body.velocity.y = 0;
       }
-
-/*      if(this.man.y > game.config.height || this.man.y < 0) {
-        this.man.body.velocity.x = 0;
-        this.man.body.velocity.y = 0;
-      }
-*/
-
     }
-
-
 }
